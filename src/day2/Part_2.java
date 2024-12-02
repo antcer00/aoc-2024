@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
+import static java.util.stream.IntStream.range;
 import static utils.InputReader.readInput;
 
 public class Part_2 {
@@ -23,24 +24,14 @@ public class Part_2 {
     }
 
     private static int solution(List<String> input) {
-        int safeReports = 0;
-        final List<List<Integer>> reports = getReports(input);
-        for (List<Integer> report : reports) {
-            if (isReportSafe(report) || problemDampener(report)) {
-                safeReports++;
-            }
-        }
-        return safeReports;
+        return (int) reports(input).stream()
+                .filter(report -> isReportSafe(report) || problemDampener(report))
+                .count();
     }
 
     private static boolean problemDampener(List<Integer> report) {
-        final List<List<Integer>> subreports = getPossibleSubReports(report);
-        for (List<Integer> subReport : subreports) {
-            if (isReportSafe(subReport)) {
-                return true;
-            }
-        }
-        return false;
+        return possibleSubReports(report).stream()
+                .anyMatch(Part_2::isReportSafe);
     }
 
     private static boolean isReportSafe(List<Integer> report) {
@@ -48,39 +39,28 @@ public class Part_2 {
     }
 
     private static boolean isIncreasingMonothone(List<Integer> report) {
-        for (int i = 1; i < report.size(); i++) {
-            if (report.get(i) <= report.get(i - 1) || !checkPair(report.get(i), report.get(i - 1))) {
-                return false;
-            }
-        }
-        return true;
+        return range(1, report.size())
+                .noneMatch(i -> report.get(i) <= report.get(i - 1) || !checkPair(report.get(i), report.get(i - 1)));
     }
 
     private static boolean isDecreasingMonothone(List<Integer> report) {
-        for (int i = 1; i < report.size(); i++) {
-            if (report.get(i) >= report.get(i - 1) || !checkPair(report.get(i), report.get(i - 1))) {
-                return false;
-            }
-        }
-        return true;
+        return range(1, report.size())
+                .noneMatch(i -> report.get(i) >= report.get(i - 1) || !checkPair(report.get(i), report.get(i - 1)));
     }
 
     private static boolean checkPair(int n1, int n2) {
         return abs(n1 - n2) >= 1 && abs(n1 - n2) <= 3;
     }
 
-    private static List<List<Integer>> getReports(List<String> input) {
-        final List<List<Integer>> reports = new ArrayList<>();
-        for (String line : input) {
-            final List<Integer> report = new ArrayList<>(Arrays.stream(line.split(" "))
-                    .map(Integer::valueOf)
-                    .toList());
-            reports.add(report);
-        }
-        return reports;
+    private static List<List<Integer>> reports(List<String> input) {
+        return input.stream()
+                .map(line -> Arrays.stream(line.split(" "))
+                        .map(Integer::valueOf)
+                        .toList())
+                .toList();
     }
 
-    private static List<List<Integer>> getPossibleSubReports(List<Integer> report) {
+    private static List<List<Integer>> possibleSubReports(List<Integer> report) {
         final List<List<Integer>> subReports = new ArrayList<>();
         for (int i = 0; i < report.size(); i++) {
             final List<Integer> subReport = new ArrayList<>(report);
