@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.logging.Level.SEVERE;
-import static utils.DaysEnum.DAY1;
+import static utils.DaysEnum.*;
 
 
 public final class InputReader {
@@ -22,7 +22,8 @@ public final class InputReader {
     }
 
     private static final Map<DaysEnum, String> INPUT_PATHS = Map.of(
-            DAY1, "input/day1.txt"
+            DAY1, "input/day1.txt",
+            DAY2, "input/day2.txt"
     );
 
     public static <T extends Collection<String>> T readInput(DaysEnum daysEnum, Supplier<T> collectionFactory) throws IOException {
