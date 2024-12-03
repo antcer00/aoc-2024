@@ -23,7 +23,8 @@ public final class InputReader {
 
     private static final Map<DaysEnum, String> INPUT_PATHS = Map.of(
             DAY1, "input/day1.txt",
-            DAY2, "input/day2.txt"
+            DAY2, "input/day2.txt",
+            DAY3, "input/day3.txt"
     );
 
     public static <T extends Collection<String>> T readInput(DaysEnum daysEnum, Supplier<T> collectionFactory) throws IOException {
